@@ -14,8 +14,6 @@ class Matrice:
     def __init__(self, size = 100):
         self.matrice = [randint(0, 1024) for i in range(size)]
         return
-    
-
 
     def GraphWhiteNoise(self):
         graph = np.linspace(0, len(self.matrice), len(self.matrice), endpoint=True)
