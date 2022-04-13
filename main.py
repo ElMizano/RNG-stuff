@@ -8,22 +8,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 from random import randint
 
-
-class Matrice:
+class WhiteNoise:
     
     def __init__(self, size = 100):
-        self.matrice = [randint(0, 1024) for i in range(size)]
+        self.noise = [randint(0, 1024) for i in range(size)]
         return
 
     def GraphWhiteNoise(self):
-        graph = np.linspace(0, len(self.matrice), len(self.matrice), endpoint=True)
-        plt.plot(graph, self.matrice, color="black", linewidth=2.5, linestyle="-",)
+        graph = np.linspace(0, len(self.noise), len(self.noise), endpoint=True)
+        plt.plot(graph, self.noise, color="black", linewidth=2.5, linestyle="-")
         
         plt.legend(loc='upper left', frameon=True)
         plt.show()
     
     def __repr__(self):
-        return str(self.matrice)
+        return str(self.noise)
 
-matrice = Matrice(size = 150)
-print(matrice.GraphWhiteNoise())
+Noise = WhiteNoise(size = 90)
+print(Noise.GraphWhiteNoise())
