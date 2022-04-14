@@ -17,7 +17,6 @@ class WhiteNoise:
     def GraphWhiteNoise(self):
         graph = np.linspace(0, len(self.noise), len(self.noise), endpoint=True)
         plt.plot(graph, self.noise, color="black", linewidth=2.5, linestyle="-")
-        
         plt.legend(loc='upper left', frameon=True)
         plt.show()
     
