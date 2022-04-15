@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from random import randint
 from PIL import Image, ImageDraw
+from perlin_noise import PerlinNoise
 import os
 import cv2
 
@@ -44,9 +45,37 @@ class WhiteNoise:
         os.system('newimage.bmp')
         return
     
+    def PerlinNoiseGen(self):
+        noise1 = PerlinNoise(octaves=3)
+        noise2 = PerlinNoise(octaves=6)
+        noise3 = PerlinNoise(octaves=12)
+        xpix = self.size
+        ypix = self.size
+        pic = []
+        for i in range(xpix):
+            row = []
+            for j in range(ypix):
+                noise_val = noise1([i/xpix, j/ypix])
+                noise_val += 0.5 * noise2([i/xpix, j/ypix])
+                noise_val += 0.25 * noise3([i/xpix, j/ypix])
+                row.append(noise_val)
+            pic.append(row)
+        filename = "perlin.jpg"
+        image = Image.new(mode = "1", size = (self.size,self.size), color = 0)
+        image.save(filename)
+        img = cv2.imread(filename)
+        for i in range(self.size):
+            for j in range(self.size):
+                if pic[i][j] < 0:
+                    img[i][j] = [255,255,255]
+        cv2.imwrite('perlin.bmp',img)
+        os.system('perlin.bmp')
+        return
+    
     def __repr__(self):
-        return str(self.noise)
+        return self.noise
 
-Noise = WhiteNoise(size = 100)
+Noise = WhiteNoise(size = 50)
 print(Noise.GraphWhiteNoise())
 print(Noise.SquareWhiteNoise())
+print(Noise.PerlinNoiseGen())
