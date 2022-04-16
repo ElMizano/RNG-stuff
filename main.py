@@ -66,7 +66,13 @@ class WhiteNoise:
         img = cv2.imread(filename)
         for i in range(self.size):
             for j in range(self.size):
-                if pic[i][j] < 0:
+                if pic[i][j] < -0.25:
+                    img[i][j] = [0,0,0]
+                elif pic[i][j] < 0:
+                    img[i][j] = [90,90,90]
+                elif pic[i][j] < 0.25:
+                    img[i][j] = [180,180,180]
+                else:
                     img[i][j] = [255,255,255]
         cv2.imwrite('perlin.bmp',img)
         os.system('perlin.bmp')
@@ -75,7 +81,7 @@ class WhiteNoise:
     def __repr__(self):
         return self.noise
 
-Noise = WhiteNoise(size = 50)
+Noise = WhiteNoise(size = 100)
 print(Noise.GraphWhiteNoise())
 print(Noise.SquareWhiteNoise())
 print(Noise.PerlinNoiseGen())
