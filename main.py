@@ -20,6 +20,9 @@ class WhiteNoise:
         return
     
     def GraphWhiteNoise(self):
+        """
+        Génère un graphique de bruit blanc
+        """
         graph = np.linspace(0, len(self.squarenoise[0]), len(self.squarenoise[0]), endpoint=True)
         plt.plot(graph, self.squarenoise[0], color="black", linewidth=2.5, linestyle="-")
         plt.legend(loc='upper left', frameon=True)
@@ -27,6 +30,9 @@ class WhiteNoise:
         return
     
     def BarWhiteNoise(self):
+        """
+        Génère une image de bruit blanc
+        """
         filename = "BarWhiteNoise.jpg"
         image = Image.new(mode = "1", size = (self.size,self.size), color = 0)
         image.save(filename)
@@ -45,6 +51,9 @@ class WhiteNoise:
         #os.system('BarWhiteNoise.bmp')
     
     def SquareWhiteNoise(self):
+        """
+        Génère une deuxième image de bruit blanc
+        """
         filename = "noise.jpg"
         image = Image.new(mode = "1", size = (self.size,self.size), color = 0)
         image.save(filename)
@@ -64,6 +73,9 @@ class WhiteNoise:
         return
     
     def PerlinNoiseGen(self):
+        """
+        Génère une image de bruit de Perlin
+        """
         noise1 = PerlinNoise(octaves=3)
         noise2 = PerlinNoise(octaves=6)
         noise3 = PerlinNoise(octaves=12)
@@ -97,6 +109,9 @@ class WhiteNoise:
         return
     
     def Merge(self):
+        """
+        Supperpose les trois images générées précédemment.
+        """
         imRed = Image.open('BarWhiteNoise.bmp')
         imGreen = Image.open('newimage.bmp')
         imBlue = Image.open('perlin.bmp')
@@ -118,9 +133,16 @@ class WhiteNoise:
         #os.system('MergedRandom.bmp')
         
     def Xorified(self,R,G,B):
+        """
+        Xorifie trois valeurs enter elles.
+        """
         return R ^ G ^ B
     
     def AllXorifiedTab(self):
+        """
+        Génère un tableau de toute les valeur xorifiées des pixels de l'image
+        créée dans Merge()
+        """
         XorTab = []
         im = Image.open('MergedRandom.bmp')
         pix = im.load()
@@ -130,24 +152,23 @@ class WhiteNoise:
                 XorTab.append(value)
         return XorTab
     
-    def SeedByMoyenneAllXorValues(self):
+    def SeedByAllXorValues(self):
+        """
+        Traite les données d'un tableau dynamique pour avoir une graine
+        """
         tab = self.AllXorifiedTab()
         somme = 0
         for i in range(len(tab)):
-            somme += somme + tab[i]
-        seed = somme//len(tab)
-        return seed
+            somme =+ somme + tab[i]
+        return somme
     
     def __repr__(self):
         return self.noise
-    
-    # LE BUT EST DE XORIFIER LES VALEURS DE PIXELS RGB R^G^B
-    # ET L'UTILISER COMME RANDOM SEED
 
 Noise = WhiteNoise(size = 10)
 Noise.GraphWhiteNoise()
 Noise.SquareWhiteNoise()
 Noise.PerlinNoiseGen()
 Noise.BarWhiteNoise()
-print(Noise.Merge())
-print(Noise.SeedByMoyenneAllXorValues())
+Noise.Merge()
+print(Noise.SeedByAllXorValues())
