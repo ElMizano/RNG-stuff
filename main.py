@@ -96,15 +96,6 @@ class WhiteNoise:
         #os.system('perlin.bmp')
         return
     
-    def XorifiedSeed(self, tab):
-        randi = randint(0, self.size)
-        randj = randint(0, self.size)
-        R = tab[randi][randj][0]
-        G = tab[randi][randj][1]
-        B = tab[randi][randj][2]
-        xored = bin(R) ^ bin(G) ^ bin(B)
-        return xored
-    
     def Merge(self):
         imRed = Image.open('BarWhiteNoise.bmp')
         imGreen = Image.open('newimage.bmp')
@@ -124,8 +115,28 @@ class WhiteNoise:
                 img[i][j] = [Rpix,Gpix,Bpix]
                 
         cv2.imwrite('MergedRandom.bmp',img)
-        os.system('MergedRandom.bmp')
+        #os.system('MergedRandom.bmp')
         
+    def Xorified(self,R,G,B):
+        return R ^ G ^ B
+    
+    def AllXorifiedTab(self):
+        XorTab = []
+        im = Image.open('MergedRandom.bmp')
+        pix = im.load()
+        for i in range(self.size):
+            for j in range(self.size):
+                value = self.Xorified(pix[i,j][0],pix[i,j][1],pix[i,j][2])
+                XorTab.append(value)
+        return XorTab
+    
+    def SeedByMoyenneAllXorValues(self):
+        tab = self.AllXorifiedTab()
+        somme = 0
+        for i in range(len(tab)):
+            somme += somme + tab[i]
+        seed = somme//len(tab)
+        return seed
     
     def __repr__(self):
         return self.noise
@@ -139,3 +150,4 @@ Noise.SquareWhiteNoise()
 Noise.PerlinNoiseGen()
 Noise.BarWhiteNoise()
 print(Noise.Merge())
+print(Noise.SeedByMoyenneAllXorValues())
