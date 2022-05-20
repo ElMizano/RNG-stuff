@@ -78,8 +78,23 @@ class WhiteNoise:
         os.system('perlin.bmp')
         return
     
+    def XorifiedSeed(self, tab):
+        randi = randint(0, self.size)
+        randj = randint(0, self.size)
+        R = tab[randi][randj][0]
+        G = tab[randi][randj][1]
+        B = tab[randi][randj][2]
+        xored = bin(R) ^ bin(G) ^ bin(B)
+        return xored
+    
+    def Hash(self):
+        return
+    
     def __repr__(self):
         return self.noise
+    
+    # LE BUT EST DE XORIFIER LES VALEURS DE PIXELS RGB R^G^B
+    # ET L'UTILISER COMME RANDOM SEED
 
 Noise = WhiteNoise(size = 100)
 print(Noise.GraphWhiteNoise())
