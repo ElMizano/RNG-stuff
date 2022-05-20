@@ -26,6 +26,24 @@ class WhiteNoise:
         plt.show()
         return
     
+    def BarWhiteNoise(self):
+        filename = "BarWhiteNoise.jpg"
+        image = Image.new(mode = "1", size = (self.size,self.size), color = 0)
+        image.save(filename)
+        img = cv2.imread(filename)
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.squarenoise[0][j] < 1024//4:
+                    img[i][j] = [0,0,100]
+                elif self.squarenoise[0][j] < 1024//2:
+                    img[i][j] = [0,0,140]
+                elif self.squarenoise[0][j] < 1024//1.5:
+                    img[i][j] = [0,0,180]
+                else:
+                    img[i][j] = [0,0,220]
+        cv2.imwrite('BarWhiteNoise.bmp',img)
+        #os.system('BarWhiteNoise.bmp')
+    
     def SquareWhiteNoise(self):
         filename = "noise.jpg"
         image = Image.new(mode = "1", size = (self.size,self.size), color = 0)
@@ -34,15 +52,15 @@ class WhiteNoise:
         for i in range(self.size):
             for j in range(self.size):
                 if self.squarenoise[i][j] < 1024//4:
-                    img[i][j] = [0,0,255]
+                    img[i][j] = [0,100,0]
                 elif self.squarenoise[i][j] < 1024//2:
-                    img[i][j] = [255,0,0]
+                    img[i][j] = [0,140,0]
                 elif self.squarenoise[i][j] < 1024//1.5:
-                    img[i][j] = [0,255,0]
+                    img[i][j] = [0,180,0]
                 else:
-                    img[i][j] = [255,255,255]
+                    img[i][j] = [0,220,0]
         cv2.imwrite('newimage.bmp',img)
-        os.system('newimage.bmp')
+        #os.system('newimage.bmp')
         return
     
     def PerlinNoiseGen(self):
@@ -67,15 +85,15 @@ class WhiteNoise:
         for i in range(self.size):
             for j in range(self.size):
                 if pic[i][j] < -0.25:
-                    img[i][j] = [0,0,0]
+                    img[i][j] = [100,0,0]
                 elif pic[i][j] < 0:
-                    img[i][j] = [90,90,90]
+                    img[i][j] = [140,0,0]
                 elif pic[i][j] < 0.25:
-                    img[i][j] = [180,180,180]
+                    img[i][j] = [180,0,0]
                 else:
-                    img[i][j] = [255,255,255]
+                    img[i][j] = [220,0,0]
         cv2.imwrite('perlin.bmp',img)
-        os.system('perlin.bmp')
+        #os.system('perlin.bmp')
         return
     
     def XorifiedSeed(self, tab):
@@ -87,8 +105,27 @@ class WhiteNoise:
         xored = bin(R) ^ bin(G) ^ bin(B)
         return xored
     
-    def Hash(self):
-        return
+    def Merge(self):
+        imRed = Image.open('BarWhiteNoise.bmp')
+        imGreen = Image.open('newimage.bmp')
+        imBlue = Image.open('perlin.bmp')
+        pixRed = imRed.load()
+        pixBlue = imBlue.load()
+        pixGreen = imGreen.load()
+        filename = "MergedRandom.jpg"
+        image = Image.new(mode = "1", size = (self.size,self.size), color = 0)
+        image.save(filename)
+        img = cv2.imread(filename)
+        for i in range(self.size):
+            for j in range(self.size):
+                Rpix = pixRed[i,j][0]
+                Gpix = pixGreen[i,j][1]
+                Bpix = pixBlue[i,j][2]
+                img[i][j] = [Rpix,Gpix,Bpix]
+                
+        cv2.imwrite('MergedRandom.bmp',img)
+        os.system('MergedRandom.bmp')
+        
     
     def __repr__(self):
         return self.noise
@@ -96,7 +133,9 @@ class WhiteNoise:
     # LE BUT EST DE XORIFIER LES VALEURS DE PIXELS RGB R^G^B
     # ET L'UTILISER COMME RANDOM SEED
 
-Noise = WhiteNoise(size = 100)
-print(Noise.GraphWhiteNoise())
-print(Noise.SquareWhiteNoise())
-print(Noise.PerlinNoiseGen())
+Noise = WhiteNoise(size = 10)
+Noise.GraphWhiteNoise()
+Noise.SquareWhiteNoise()
+Noise.PerlinNoiseGen()
+Noise.BarWhiteNoise()
+print(Noise.Merge())
