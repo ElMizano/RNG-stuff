@@ -11,6 +11,7 @@ from PIL import Image, ImageDraw
 from perlin_noise import PerlinNoise
 import os
 import cv2
+import hashlib
 
 class WhiteNoise:
     
@@ -161,6 +162,10 @@ class WhiteNoise:
         for i in range(len(tab)):
             somme =+ somme + tab[i]
         return somme
+    
+    def hashing(item):
+        item = item.hash()
+        return item
     
     def __repr__(self):
         return self.noise
