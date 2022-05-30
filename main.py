@@ -163,17 +163,60 @@ class WhiteNoise:
             somme =+ somme + tab[i]
         return somme
     
-    def hashing(item):
-        item = item.hash()
-        return item
+
     
     def __repr__(self):
         return self.noise
 
-Noise = WhiteNoise(size = 10)
-Noise.GraphWhiteNoise()
-Noise.SquareWhiteNoise()
-Noise.PerlinNoiseGen()
-Noise.BarWhiteNoise()
-Noise.Merge()
-print(Noise.SeedByAllXorValues())
+
+def hashing(item):
+    item = hashlib.md5(str(item).encode())
+    return item
+
+def hex_to_dec(num):
+    num = list(num)
+    for i in range(len(num)):
+        if num[i] == "a":
+            num[i] = "10"
+        elif num[i] == "b":
+            num[i] = "11"
+        elif num[i] == "c":
+            num[i] = "12"
+        elif num[i] == "d":
+            num[i] = "13"
+        elif num[i] == "e":
+            num[i] = "14"
+        elif num[i] == "f":
+            num[i] = "15"
+    num.reverse()
+    k = 0
+    res = 0
+    for i in range(len(num)):
+        res += int(num[i])*16**k
+        k += 1
+    return res
+
+
+def generate_seed(amount):
+    seed = ""
+    Noise = WhiteNoise(size = 10)
+    Noise.GraphWhiteNoise()
+    Noise.SquareWhiteNoise()
+    Noise.PerlinNoiseGen()
+    Noise.BarWhiteNoise()
+    Noise.Merge()
+    for i in range(amount):
+        seed += str((hex_to_dec(hashing(Noise.SeedByAllXorValues()).hexdigest())))
+        Noise = WhiteNoise(size = 10)
+        Noise.GraphWhiteNoise()
+        Noise.SquareWhiteNoise()
+        Noise.PerlinNoiseGen()
+        Noise.BarWhiteNoise()
+        Noise.Merge()
+        print(i)
+    return(int(seed))
+
+print(generate_seed(100))
+
+
+
